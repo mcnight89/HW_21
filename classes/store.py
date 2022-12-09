@@ -1,24 +1,8 @@
-class Storage(ABC):
-    def __init__(self, items: Dict[str, int], capacity: int):
-        self.items = items
-        self.capacity = capacity
+from typing import Dict
 
-    @abstractmethod
-    def add(self, name: str, amount: int) -> None:
-        pass
+from classes.storage import Gstorage
 
-    @abstractmethod
-    def remove(self, name: str, amount: int) -> None:
-        pass
 
-    @abstractmethod
-    def get_free_space(self) -> int:
-        pass
-
-    @abstractmethod
-    def get_items(self) -> Dict[str, int]:
-        pass
-
-    @abstractmethod
-    def get_unique_items_count(self) -> int:
-        pass
+class Store(Gstorage):
+    def __init__(self, items: Dict[str, int], capacity: int = 100):
+        super().__init__(items, capacity)

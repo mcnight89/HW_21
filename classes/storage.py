@@ -1,28 +1,34 @@
-from abc import ABC, abstractmethod
 from typing import Dict
 
+from classes.abstractstorage import Storage
+from error import NotEnoughProduct, NotEnoughSpace, UnknownProduct
 
-class Storage(ABC):
+
+class Gstorage(Storage):
     def __init__(self, items: Dict[str, int], capacity: int):
+        super().__init__(items, capacity)
         self.items = items
         self.capacity = capacity
 
-    @abstractmethod
     def add(self, name: str, amount: int) -> None:
-        pass
+        if self.get_free_space() < amount:
+            raise NotEnoughSpace
+        self._items[name] = self._items.get(name, 0) + amount
 
-    @abstractmethod
     def remove(self, name: str, amount: int) -> None:
-        pass
+        if name not in self._items:
+            raise UnknownProduct
+        if self._items[name] < amount:
+            raise NotEnoughProduct
+        self._items[name] -= amount
+        if self._items[name] == 0:
+            self._items.pop(name)
 
-    @abstractmethod
     def get_free_space(self) -> int:
-        pass
+        return self._capacity - sum(self._items.values())
 
-    @abstractmethod
     def get_items(self) -> Dict[str, int]:
-        pass
+        return self._items
 
-    @abstractmethod
     def get_unique_items_count(self) -> int:
-        pass
+        return len(self._items)
